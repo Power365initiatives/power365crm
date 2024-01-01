@@ -624,7 +624,7 @@ namespace P365I_CRM.Common.Helpers {
                 Xrm.Navigation.navigateTo(customPage, navigationOptions).then(
                     function (success) {
                         console.log('Closed', success);
-                        Xrm.Page.data.refresh(false);
+                        primaryControl.data.refresh(false);
                         resolve(success);
 
                     }).catch(
@@ -663,8 +663,7 @@ namespace P365I_CRM.Common.Helpers {
 
         Xrm.Navigation.navigateTo(pageInput, navigationOptions).then(
             function () {
-                console.log('Closed');
-                Xrm.Page.data.refresh(false);
+                console.log('Closed');                
             }).catch(
                 function (error) {
                     console.log('Error', error);

@@ -18,12 +18,14 @@ namespace P365I_CRM.Main.CustomAPIs
 
             tracingService.Trace("Start Custom API QualifyLead");
 
-            int creationType = (int)context.InputParameters["QualifyProspect_creationtype"];
+            bool createAccount = (bool)context.InputParameters["QualifyProspect_account"];
+            bool createContact = (bool)context.InputParameters["QualifyProspect_contact"];
+            bool createOpp = (bool)context.InputParameters["QualifyProspect_opportunity"];
             string prospectId = context.InputParameters["QualifyProspect_prospectid"].ToString();
 
             Entity prospect = service.Retrieve("p365i_prospect", new Guid(prospectId), new Microsoft.Xrm.Sdk.Query.ColumnSet(true));
             var prospectHandler = new Core.Handlers.ProspectHandler(tracingService, service);
-            prospectHandler.QualifyProspect(prospect, creationType, context);
+            prospectHandler.QualifyProspect(prospect, createAccount, createContact, createOpp, context);
 
             tracingService.Trace("End Custom API QualifyLead");
         }

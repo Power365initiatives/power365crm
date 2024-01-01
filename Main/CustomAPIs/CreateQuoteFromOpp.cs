@@ -16,7 +16,7 @@ namespace P365I_CRM.Main.CustomAPIs
             IOrganizationServiceFactory factory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
             IOrganizationService service = factory.CreateOrganizationService(context.UserId);
 
-            tracingService.Trace("Start Custom API CreateQuoteFromOpp");                       
+            tracingService.Trace("Start Custom API CreateQuoteFromOpp");
 
             EntityReference oppRef = new EntityReference(context.PrimaryEntityName, context.PrimaryEntityId);
             var oppHandler = new Core.Handlers.OpportunityHandler(tracingService, service);

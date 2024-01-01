@@ -22,7 +22,7 @@ namespace P365I_CRM.Console
 
             Entity prospect = service.Retrieve("p365i_prospect", new Guid("d483fe39-cc49-4379-b025-f318312209ab"), new ColumnSet(true));
             var prospectHandler = new Core.P365I_CRM.Core.Handlers.ProspectHandler(tracingService, service);
-            prospectHandler.QualifyProspect(prospect.ToEntityReference(), 4, context);
+            prospectHandler.QualifyProspect(prospect, true, true, true, context);
         }
     }
 }

@@ -534,7 +534,7 @@ var P365I_CRM;
                         navigationOptions = navigationOptions !== null && navigationOptions !== void 0 ? navigationOptions : defaultnavigationOptions;
                         Xrm.Navigation.navigateTo(customPage, navigationOptions).then(function (success) {
                             console.log('Closed', success);
-                            Xrm.Page.data.refresh(false);
+                            primaryControl.data.refresh(false);
                             resolve(success);
                         }).catch(function (error) {
                             console.log('Error', error);
@@ -567,7 +567,6 @@ var P365I_CRM;
                 };
                 Xrm.Navigation.navigateTo(pageInput, navigationOptions).then(function () {
                     console.log('Closed');
-                    Xrm.Page.data.refresh(false);
                 }).catch(function (error) {
                     console.log('Error', error);
                 });

@@ -23,7 +23,7 @@ namespace P365I_CRM.Core.Handlers
             _service = service;
         }
 
-        public void QualifyProspect(Entity prospect, int creationType, IPluginExecutionContext context)
+        public void QualifyProspect(Entity prospect, bool createAccount, bool createContact, bool createOpp, IPluginExecutionContext context)
         {
             _tracingService.Trace("Start QualifyProspect");
 
@@ -34,39 +34,20 @@ namespace P365I_CRM.Core.Handlers
                 EntityReference account = new EntityReference();
                 EntityReference contact = new EntityReference();
 
-                if (creationType == 1) //create account, contact and Opp
+                if (createAccount) //create account
                 {
                     account = CreateEntityFromProspect(prospect, null, null, "account");
+                }
+                if (createContact) //create contact
+                {
                     contact = CreateEntityFromProspect(prospect, account, null, "contact");
+                }
+                if (createOpp) //create Opp
+                {
                     opportunity = CreateEntityFromProspect(prospect, account, contact, "p365i_opportunity");
+                }
 
-                    UpdateProspectStatus(prospect, (int)ProspectState.Inactive, (int)ProspectStatus.Qualified);
-                }
-                else if (creationType == 2) //create account and Opp
-                {
-                    account = CreateEntityFromProspect(prospect, null, null, "account");
-                    opportunity = CreateEntityFromProspect(prospect, account, null, "p365i_opportunity");
-
-                    UpdateProspectStatus(prospect, (int)ProspectState.Inactive, (int)ProspectStatus.Qualified);
-                }
-                else if (creationType == 3) //create contact and Opp
-                {
-                    contact = CreateEntityFromProspect(prospect, null, null, "contact");
-                    opportunity = CreateEntityFromProspect(prospect, null, contact, "p365i_opportunity");
-
-                    UpdateProspectStatus(prospect, (int)ProspectState.Inactive, (int)ProspectStatus.Qualified);
-                }
-                else if (creationType == 4) //create Opp
-                {
-                    opportunity = CreateEntityFromProspect(prospect, null, null, "p365i_opportunity");
-
-                    UpdateProspectStatus(prospect, (int)ProspectState.Inactive, (int)ProspectStatus.Qualified);
-                }
-                else
-                {
-                    context.OutputParameters["QualifyProspect_oppId"] = null;
-                    context.OutputParameters["QualifyProspect_resultMessage"] = "Invalid creation type";
-                }
+                UpdateProspectStatus(prospect, (int)ProspectState.Inactive, (int)ProspectStatus.Qualified);
 
                 Helpers.Common.ExecuteBatchRequest(_service, _tracingService, requestCollection);
                 context.OutputParameters["QualifyProspect_oppId"] = opportunity.Id.ToString();
@@ -106,12 +87,11 @@ namespace P365I_CRM.Core.Handlers
                 {
                     Entity contact = Helpers.Common.CreateEntityfromMapping(_service, prospectRef, entityTarget, TargetFieldType.All);
                     contact.Id = Guid.NewGuid();
-                    if (accountRef != null)
+                    if (accountRef.Id != Guid.Empty)
                     {
                         contact.Attributes.Add("parentcustomerid", accountRef);
-                        contact.Attributes.Add("accountid", accountRef);
-                        
-                    }                        
+                        contact.Attributes.Add("accountid", accountRef);                        
+                    }
                     else
                     {
                         if (prospect.Contains("p365i_parentaccountid"))
@@ -133,7 +113,7 @@ namespace P365I_CRM.Core.Handlers
             {
                 Entity opportunity = Helpers.Common.CreateEntityfromMapping(_service, prospectRef, entityTarget, TargetFieldType.All);
                 opportunity.Id = Guid.NewGuid();
-                if (accountRef != null)
+                if (accountRef.Id != Guid.Empty)
                     opportunity.Attributes.Add("p365i_parentaccountid", accountRef);
                 else
                 {
@@ -143,7 +123,7 @@ namespace P365I_CRM.Core.Handlers
                         opportunity.Attributes.Add("p365i_parentaccountid", accountRef2);
                     }
                 }
-                if (contactRef != null)
+                if (contactRef.Id != Guid.Empty)
                     opportunity.Attributes.Add("p365i_parentcontactid", contactRef);
                 else
                 {

@@ -124,9 +124,7 @@
     <None Include="key.snk" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Plugins\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="ILMergeOrder.txt" />
   </ItemGroup>

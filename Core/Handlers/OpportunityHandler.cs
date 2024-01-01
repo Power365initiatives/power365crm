@@ -85,7 +85,7 @@ namespace P365I_CRM.Core.Handlers
             {
                 Entity quoteLine = Helpers.Common.CreateEntityfromMapping(_service, oppLine.ToEntityReference(), "p365i_quoteproduct", TargetFieldType.All);
                 quoteLine.Id = Guid.NewGuid();
-                quoteLine.Attributes.Add("p365i_quoteid", quote.ToEntityReference());
+                quoteLine.Attributes.Add("p365i_quote", quote.ToEntityReference());
                 requestCollection.Add(new CreateRequest() { Target = quoteLine });                
             }
 
