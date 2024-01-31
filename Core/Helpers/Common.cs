@@ -13,6 +13,8 @@ using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Sdk.Workflow;
 using Microsoft.Xrm.Sdk.Messages;
 using Core.Extensions;
+using Microsoft.Xrm.Sdk.Metadata.Query;
+using Microsoft.Xrm.Sdk.Metadata;
 
 namespace P365I_CRM.Core.Helpers
 {
@@ -846,5 +848,24 @@ namespace P365I_CRM.Core.Helpers
             }
             tracingService.Trace("End Upload File");
         }
+        public static string sGetEntityNameFromCode(string ObjectTypeCode, IOrganizationService service)
+        {
+            MetadataFilterExpression entityFilter = new MetadataFilterExpression(LogicalOperator.And);
+            entityFilter.Conditions.Add(new MetadataConditionExpression("ObjectTypeCode", MetadataConditionOperator.Equals, Convert.ToInt32(ObjectTypeCode)));
+            EntityQueryExpression entityQueryExpression = new EntityQueryExpression()
+            {
+                Criteria = entityFilter
+            };
+            RetrieveMetadataChangesRequest retrieveMetadataChangesRequest = new RetrieveMetadataChangesRequest()
+            {
+                Query = entityQueryExpression,
+                ClientVersionStamp = null
+            };
+            RetrieveMetadataChangesResponse response = (RetrieveMetadataChangesResponse)service.Execute(retrieveMetadataChangesRequest);
+
+            EntityMetadata entityMetadata = (EntityMetadata)response.EntityMetadata[0];
+            return entityMetadata.SchemaName.ToLower();
+        }
+
     }
 }

@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P365I_CRM.Core", "Core\P365
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "WebResources", "WebResources\", "{37F1C98E-A9AA-434D-B88E-DFB5E9ADB3F7}"
 	ProjectSection(WebsiteProperties) = preProject
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_57414"
 		Debug.AspNetCompiler.PhysicalPath = "WebResources\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_57414\"

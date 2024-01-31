@@ -116,6 +116,7 @@
   <ItemGroup>
     <Compile Include="CustomAPIs\CreateQuoteFromOpp.cs" />
     <Compile Include="CustomAPIs\QualifyProspect.cs" />
+    <Compile Include="Plugins\OpportunityProductCalculateTotal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
