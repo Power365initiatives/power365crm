@@ -228,9 +228,9 @@
       <Private>True</Private>
       <Aliases>Core</Aliases>
     </ProjectReference>
-    <ProjectReference Include="..\Main\P365I_CRM.Main.csproj">
+    <ProjectReference Include="..\Main\P365I_CRM.Sales.csproj">
       <Project>{212f4807-937e-4afb-a771-8737c51f8f5a}</Project>
-      <Name>P365I_CRM.Main</Name>
+      <Name>P365I_CRM.Sales</Name>
       <Private>True</Private>
       <Aliases>Main</Aliases>
     </ProjectReference>

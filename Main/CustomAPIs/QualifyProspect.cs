@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace P365I_CRM.Main.CustomAPIs
+namespace P365I_CRM.Sales.CustomAPIs
 {
     public class QualifyProspect : IPlugin
     {

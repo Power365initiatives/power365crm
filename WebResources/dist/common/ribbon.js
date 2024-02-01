@@ -1,7 +1,7 @@
 "use strict";
 console.log(`Ribbon Script Loading...`);
-var DP365I_CRM;
-(function (DP365I_CRM) {
+var P365I_CRM;
+(function (P365I_CRM) {
     var Ribbon;
     (function (Ribbon) {
         let Common;
@@ -28,7 +28,7 @@ var DP365I_CRM;
         })(Common = Ribbon.Common || (Ribbon.Common = {}));
         let Prospect;
         (function (Prospect) {
-            async function Qualify(primaryControl) {
+            async function Qualify(primaryControl, customPageName) {
                 console.log(`Function Qualify Triggered`);
                 try {
                     console.log(`Qualify try`);
@@ -39,12 +39,7 @@ var DP365I_CRM;
                     if (P365I_CRM.Common.Helpers.formDirty(formContext)) {
                         return;
                     }
-                    const confirmStrings = { title: "Qualify Prospect", text: "Are you sure you would like to qualify this prospect?" };
-                    let confirmAction = await P365I_CRM.Common.Helpers.confirmDialog(confirmStrings, undefined).catch((e) => console.log('Error:', e.message)) || new Object();
-                    if (confirmAction.confirmed !== true) {
-                        return;
-                    }
-                    Common.openCustomPage(primaryControl, "p365i_qualifylead_c2d72", "Qualify Prospect", 50, 50);
+                    Common.openCustomPage(primaryControl, customPageName, "Qualify Prospect", 30, 40);
                 }
                 catch (error) {
                     console.log(`Qualify error`, error);
@@ -134,7 +129,42 @@ var DP365I_CRM;
             }
             Quote.CreateQuoteFromOpp = CreateQuoteFromOpp;
         })(Quote = Ribbon.Quote || (Ribbon.Quote = {}));
-    })(Ribbon = DP365I_CRM.Ribbon || (DP365I_CRM.Ribbon = {}));
-})(DP365I_CRM || (DP365I_CRM = {}));
+        let OpportunityProduct;
+        (function (OpportunityProduct) {
+            async function DeleteOpportunityProduct(primaryControl) {
+                console.log(`Function DeleteOpportunityProduct Triggered`);
+                if (!primaryControl) {
+                    console.log('Primary Control not present, abort');
+                }
+                const confirmStrings = { title: "Delete opportunity product", text: "Are you sure you want to delete the selected product?" };
+                let confirmAction = await P365I_CRM.Common.Helpers.confirmDialog(confirmStrings, undefined).catch((e) => console.log('Error:', e.message)) || new Object();
+                if (confirmAction.confirmed !== true) {
+                    return;
+                }
+                var recordId = P365I_CRM.Common.Helpers.cleanID(primaryControl.data.entity.getId());
+                var execute_p365i_CreateQuotefromOpp_Request = {
+                    entity: { entityType: "p365i_opportunity", id: recordId },
+                    getMetadata: function () {
+                        return {
+                            boundParameter: "entity",
+                            parameterTypes: {
+                                entity: { typeName: "mscrm.p365i_opportunity", structuralProperty: 5 }
+                            },
+                            operationType: 0, operationName: "p365i_CreateQuotefromOpp"
+                        };
+                    }
+                };
+                Xrm.WebApi.execute(execute_p365i_CreateQuotefromOpp_Request).then(function success(response) {
+                    if (response.ok) {
+                        console.log("Success");
+                    }
+                }).catch(function (error) {
+                    console.log(error.message);
+                });
+            }
+            OpportunityProduct.DeleteOpportunityProduct = DeleteOpportunityProduct;
+        })(OpportunityProduct = Ribbon.OpportunityProduct || (Ribbon.OpportunityProduct = {}));
+    })(Ribbon = P365I_CRM.Ribbon || (P365I_CRM.Ribbon = {}));
+})(P365I_CRM || (P365I_CRM = {}));
 console.log(`Ribbon Script Loaded...`);
 //# sourceMappingURL=ribbon.js.map

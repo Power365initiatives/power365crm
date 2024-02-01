@@ -36,10 +36,12 @@ namespace P365I_CRM.Common.Helpers {
         P365I_CRM.Common.Helpers.alertDialog(alertStrings, undefined, undefined, undefined);
     }
 
-    export function formDirty(formContext: Xrm.FormContext) {
-        let dirty = formContext.data.entity.getIsDirty();
-        if (dirty) {
-            const alertStrings = { confirmButtonLabel: "OK", text: "There are unsaved changes. Please save the form before proceeding.", title: "Warning" };
+    export function formDirty(formContext: Xrm.FormContext) : boolean
+    {
+        let dirty: boolean = formContext.data.entity.getIsDirty();
+        if (dirty)
+        {
+            const alertStrings: Xrm.Navigation.AlertStrings = { confirmButtonLabel: "OK", text: "There are unsaved changes. Please save the form before proceeding.", title: "Warning" };
             alertDialog(alertStrings, undefined, undefined, undefined);
         }
         return dirty;
@@ -95,21 +97,24 @@ namespace P365I_CRM.Common.Helpers {
         });
     }
 
-    export function alertDialog(alertStrings: Xrm.Navigation.AlertStrings | undefined, alertOptions: Xrm.Navigation.DialogSizeOptions | undefined, succesCallback: Function | undefined, errorCallback: Function | undefined) {
-        //Description: Global alertDialog. Styled
-        //Ussage: 
-        alertStrings = alertStrings ? alertStrings : { confirmButtonLabel: "Ok", text: "Confirmed", title: "Warning" };
-        alertOptions = alertOptions ? alertOptions : { height: 200, width: 450 };
+    export function alertDialog(alertStrings: Xrm.Navigation.AlertStrings | undefined, alertOptions: Xrm.Navigation.DialogSizeOptions | undefined, succesCallback: Function | undefined, errorCallback: Function | undefined) : void
+    {
+        alertStrings = alertStrings ?? { confirmButtonLabel: "Ok", text: "Confirmed", title: "Warning" };
+        alertOptions = alertOptions ?? { height: 200, width: 450 };
 
         Xrm.Navigation.openAlertDialog(alertStrings, alertOptions).then(
-            function success(result) {
-                if (succesCallback) {
+            function success(result)
+            {
+                if (succesCallback)
+                {
                     succesCallback(result);
                 }
                 console.log("Alert dialog closed");
             },
-            function (error) {
-                if (errorCallback) {
+            function (error)
+            {
+                if (errorCallback)
+                {
                     errorCallback(error);
                 }
             }

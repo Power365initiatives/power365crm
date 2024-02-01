@@ -97,8 +97,8 @@ var P365I_CRM;
             }
             Helpers.confirmDialog = confirmDialog;
             function alertDialog(alertStrings, alertOptions, succesCallback, errorCallback) {
-                alertStrings = alertStrings ? alertStrings : { confirmButtonLabel: "Ok", text: "Confirmed", title: "Warning" };
-                alertOptions = alertOptions ? alertOptions : { height: 200, width: 450 };
+                alertStrings = alertStrings !== null && alertStrings !== void 0 ? alertStrings : { confirmButtonLabel: "Ok", text: "Confirmed", title: "Warning" };
+                alertOptions = alertOptions !== null && alertOptions !== void 0 ? alertOptions : { height: 200, width: 450 };
                 Xrm.Navigation.openAlertDialog(alertStrings, alertOptions).then(function success(result) {
                     if (succesCallback) {
                         succesCallback(result);

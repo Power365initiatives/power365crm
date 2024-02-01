@@ -110,6 +110,7 @@
   <ItemGroup>
     <Compile Include="Enums\ProspectStatus.cs" />
     <Compile Include="Extensions\List.cs" />
+    <Compile Include="Handlers\OpportunityProductHandler.cs" />
     <Compile Include="Handlers\ProspectHandler.cs" />
     <Compile Include="Handlers\OpportunityHandler.cs" />
     <Compile Include="Helpers\Common.cs" />

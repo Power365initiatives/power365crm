@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace P365I_CRM.Sales.CustomAPIs
 {
-    public class CreateQuoteFromOpp : IPlugin
+    internal class DeleteProductOpportunity : IPlugin
     {
         public void Execute(IServiceProvider serviceProvider)
         {
@@ -16,13 +16,15 @@ namespace P365I_CRM.Sales.CustomAPIs
             IOrganizationServiceFactory factory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
             IOrganizationService service = factory.CreateOrganizationService(context.UserId);
 
-            tracingService.Trace("Start Custom API CreateQuoteFromOpp");
+            tracingService.Trace("Start Custom API DeleteProductOpportunity");
 
-            EntityReference oppRef = new EntityReference(context.PrimaryEntityName, context.PrimaryEntityId);
-            var oppHandler = new Core.Handlers.OpportunityHandler(tracingService, service);
-            oppHandler.CreateQuoteFromOpportunity(oppRef, context);
+            var recordId = new Guid((string)context.InputParameters["DeleteProductOpportunity_recordId"]);
+            var oppProductHandler = new Core.Handlers.OpportunityProductHandler(tracingService, service);
+            var oppRecord = oppProductHandler.GetOppfromChild(recordId);
+            
+            oppProductHandler.DeleteOpportunityProduct(recordId, oppRecord, context);
 
-            tracingService.Trace("End Custom API CreateQuoteFromOpp");
+            tracingService.Trace("End Custom API DeleteProductOpportunity");
         }
     }
 }

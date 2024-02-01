@@ -9,8 +9,8 @@
     <ProjectGuid>{212F4807-937E-4AFB-A771-8737C51F8F5A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>P365I_CRM.Main</RootNamespace>
-    <AssemblyName>P365I_CRM.Main</AssemblyName>
+    <RootNamespace>P365I_CRM.Sales</RootNamespace>
+    <AssemblyName>P365I_CRM.Sales</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -115,8 +115,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustomAPIs\CreateQuoteFromOpp.cs" />
+    <Compile Include="CustomAPIs\DeleteProductOpportunity.cs" />
+    <Compile Include="CustomAPIs\CloseOpportunity.cs" />
     <Compile Include="CustomAPIs\QualifyProspect.cs" />
-    <Compile Include="Plugins\OpportunityProductCalculateTotal.cs" />
+    <Compile Include="Plugins\OpportunityProductPostOp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace P365I_CRM.Sales.CustomAPIs
 {
-    public class CreateQuoteFromOpp : IPlugin
+    public class CloseOpportunity : IPlugin
     {
         public void Execute(IServiceProvider serviceProvider)
         {
@@ -16,13 +16,16 @@ namespace P365I_CRM.Sales.CustomAPIs
             IOrganizationServiceFactory factory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
             IOrganizationService service = factory.CreateOrganizationService(context.UserId);
 
-            tracingService.Trace("Start Custom API CreateQuoteFromOpp");
+            tracingService.Trace("Start Custom API CloseOpportunity");
 
-            EntityReference oppRef = new EntityReference(context.PrimaryEntityName, context.PrimaryEntityId);
+            string oppId = (string)context.InputParameters["CloseOpportunity_OppId"];
+            string action = (string)context.InputParameters["QualifyProspect_action"];
+
+            Entity opportunity = service.Retrieve("p365i_opportunity", new Guid(oppId), new Microsoft.Xrm.Sdk.Query.ColumnSet(true));
             var oppHandler = new Core.Handlers.OpportunityHandler(tracingService, service);
-            oppHandler.CreateQuoteFromOpportunity(oppRef, context);
+            oppHandler.CloseOpportunity(opportunity, action, context);
 
-            tracingService.Trace("End Custom API CreateQuoteFromOpp");
+            tracingService.Trace("End Custom API CloseOpportunity");
         }
     }
 }
