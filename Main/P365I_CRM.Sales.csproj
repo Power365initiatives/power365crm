@@ -118,6 +118,7 @@
     <Compile Include="CustomAPIs\DeleteProductOpportunity.cs" />
     <Compile Include="CustomAPIs\CloseOpportunity.cs" />
     <Compile Include="CustomAPIs\QualifyProspect.cs" />
+    <Compile Include="Plugins\OpportunityPostOp.cs" />
     <Compile Include="Plugins\OpportunityProductPostOp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

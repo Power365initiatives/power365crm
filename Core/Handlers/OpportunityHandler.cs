@@ -87,7 +87,7 @@ namespace P365I_CRM.Core.Handlers
                 Entity quoteLine = Helpers.Common.CreateEntityfromMapping(_service, oppLine.ToEntityReference(), "p365i_quoteproduct", TargetFieldType.All);
                 quoteLine.Id = Guid.NewGuid();
                 quoteLine.Attributes.Add("p365i_quote", quote.ToEntityReference());
-                requestCollection.Add(new CreateRequest() { Target = quoteLine });                
+                requestCollection.Add(new CreateRequest() { Target = quoteLine });
             }
 
             _tracingService.Trace("End CreateQuoteLinesFromCollection");
@@ -121,11 +121,11 @@ namespace P365I_CRM.Core.Handlers
             }
             else
             {
-                foreach(var quoteToClose in openQuotes.Entities)
-                {                    
+                foreach (var quoteToClose in openQuotes.Entities)
+                {
                     quoteToClose.Attributes["statecode"] = new OptionSetValue(1);
                     quoteToClose.Attributes["statuscode"] = new OptionSetValue(3);
-                    requestCollection.Add(new UpdateRequest() { Target = quoteToClose });                
+                    requestCollection.Add(new UpdateRequest() { Target = quoteToClose });
                 }
 
                 opportunity.Attributes["statecode"] = new OptionSetValue(1);
@@ -156,6 +156,21 @@ namespace P365I_CRM.Core.Handlers
 
             _tracingService.Trace("End GetOpenQuotes");
             return Helpers.Common.getDatabyFetchXML(_service, fetchXML);
+        }
+
+        public void UpdateOpportunityRevenue(Entity opportunity)
+        {
+            _tracingService.Trace("Start UpdateOpportunityRevenue");
+            if (opportunity.Contains("p365i_revenue") && opportunity.Contains("p365i_totalamount"))
+            {
+                var calculatemode = opportunity.GetAttributeValue<OptionSetValue>("p365i_revenue").Value;
+                if (calculatemode == 446310001)
+                {
+                    Entity opp = opportunity;
+                    opp.Attributes["p365i_estrevenue"] = opportunity.Attributes["p365i_totalamount"];
+                    _service.Update(opp);
+                }
+            }
         }
     }
 }
