@@ -97,41 +97,53 @@ namespace P365I_CRM.Core.Handlers
         {
             _tracingService.Trace("Start CloseOpportunity");
 
+            requestCollection = new OrganizationRequestCollection();
             var openQuotes = GetOpenQuotes(opportunity.ToEntityReference());
             if (action == "win")
             {
                 if (openQuotes.Entities.Count > 1)
                 {
-                    context.OutputParameters["CloseOpportunity_resultMessage"] = "There are more than 1 open quotes for this opportunity. Please close them first.";
+                    context.OutputParameters["CloseOpportunity_resultMessage"] = "There are more than 1 open quotes for this opportunity. Please leave only 1 active.";
                 }
                 else if (openQuotes.Entities.Count == 1)
                 {
-                }
-                else
-                {
                     Entity quote = openQuotes.Entities[0];
-                    quote.Attributes["statecode"] = new OptionSetValue(1);
-                    quote.Attributes["statuscode"] = new OptionSetValue(3);
+                    quote.Attributes["statecode"] = new OptionSetValue(1); //Inactive
+                    quote.Attributes["statuscode"] = new OptionSetValue(2); //Inactive
                     requestCollection.Add(new UpdateRequest() { Target = quote });
 
-                    opportunity.Attributes["statecode"] = new OptionSetValue(1);
-                    opportunity.Attributes["statuscode"] = new OptionSetValue(3);
+                    opportunity.Attributes["statecode"] = new OptionSetValue(1); //Inactive
+                    opportunity.Attributes["statuscode"] = new OptionSetValue(2); //Won
                     requestCollection.Add(new UpdateRequest() { Target = opportunity });
+
+                    context.OutputParameters["CloseOpportunity_resultMessage"] = "Opportunity won";
+                }
+                else //0 open quotes
+                {
+                    opportunity.Attributes["statecode"] = new OptionSetValue(1); //Inactive
+                    opportunity.Attributes["statuscode"] = new OptionSetValue(2); //Won
+                    requestCollection.Add(new UpdateRequest() { Target = opportunity });
+
+                    context.OutputParameters["CloseOpportunity_resultMessage"] = "Opportunity won";
                 }
             }
             else
             {
                 foreach (var quoteToClose in openQuotes.Entities)
                 {
-                    quoteToClose.Attributes["statecode"] = new OptionSetValue(1);
-                    quoteToClose.Attributes["statuscode"] = new OptionSetValue(3);
+                    quoteToClose.Attributes["statecode"] = new OptionSetValue(1); //Inactive
+                    quoteToClose.Attributes["statuscode"] = new OptionSetValue(2); //Inactive
                     requestCollection.Add(new UpdateRequest() { Target = quoteToClose });
                 }
 
-                opportunity.Attributes["statecode"] = new OptionSetValue(1);
-                opportunity.Attributes["statuscode"] = new OptionSetValue(3);
+                opportunity.Attributes["statecode"] = new OptionSetValue(1); //Inactive
+                opportunity.Attributes["statuscode"] = new OptionSetValue(446310002); //Lost
                 requestCollection.Add(new UpdateRequest() { Target = opportunity });
+
+                context.OutputParameters["CloseOpportunity_resultMessage"] = "Opportunity lost";
             }
+
+            Helpers.Common.ExecuteBatchRequest(_service, _tracingService, requestCollection);           
 
             _tracingService.Trace("End CloseOpportunity");
         }
@@ -143,10 +155,10 @@ namespace P365I_CRM.Core.Handlers
             string fetchXML = $@"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                                   <entity name='p365i_quote'>
                                     <attribute name='p365i_quoteid' />
-                                    <attribute name='p365i_name' />
+                                    <attribute name='p365i_topic' />
                                     <attribute name='p365i_totalamount' />
-                                    <attribute name='p365i_quotestatus' />
-                                    <order attribute='p365i_name' descending='false' />
+                                    <attribute name='statecode' />
+                                    <attribute name='statuscode' />
                                     <filter type='and'>
                                         <condition attribute='statecode' operator='eq' value='0' />
                                         <condition attribute='p365i_opportunity' operator='eq' uitype='p365i_opportunity' value='{OppRef.Id}' />

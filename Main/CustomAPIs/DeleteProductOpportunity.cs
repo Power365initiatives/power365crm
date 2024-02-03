@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace P365I_CRM.Sales.CustomAPIs
 {
-    internal class DeleteProductOpportunity : IPlugin
+    public class DeleteProductOpportunity : IPlugin
     {
         public void Execute(IServiceProvider serviceProvider)
         {
@@ -20,9 +20,8 @@ namespace P365I_CRM.Sales.CustomAPIs
 
             var recordId = new Guid((string)context.InputParameters["DeleteProductOpportunity_recordId"]);
             var oppProductHandler = new Core.Handlers.OpportunityProductHandler(tracingService, service);
-            var oppRecord = oppProductHandler.GetOppfromChild(recordId);
             
-            oppProductHandler.DeleteOpportunityProduct(recordId, oppRecord, context);
+            oppProductHandler.DeleteOpportunityProduct(recordId, context);
 
             tracingService.Trace("End Custom API DeleteProductOpportunity");
         }

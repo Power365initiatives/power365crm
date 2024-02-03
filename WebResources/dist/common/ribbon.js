@@ -6,7 +6,7 @@ var P365I_CRM;
     (function (Ribbon) {
         let Common;
         (function (Common) {
-            async function openCustomPage(primaryControl, customPageName, customPageTitle, width, height) {
+            async function openCustomPage(primaryControl, customPageName, customPageTitle, width, height, action) {
                 console.log(`Ribbon Function openCustomPage Triggered`);
                 const navigationOptions = {
                     target: 2,
@@ -19,7 +19,7 @@ var P365I_CRM;
                     pageType: "custom",
                     name: customPageName,
                     entityName: primaryControl.data.entity.getEntityName(),
-                    recordId: P365I_CRM.Common.Helpers.cleanID(primaryControl.data.entity.getId()),
+                    recordId: P365I_CRM.Common.Helpers.cleanID(primaryControl.data.entity.getId()) + "|" + action,
                 };
                 const customPageResult = await P365I_CRM.Common.Helpers.openCustomPage(primaryControl, customPage, navigationOptions);
                 console.log(`Ribbon openCustomPage Result`, customPageResult);
@@ -39,7 +39,7 @@ var P365I_CRM;
                     if (P365I_CRM.Common.Helpers.formDirty(formContext)) {
                         return;
                     }
-                    Common.openCustomPage(primaryControl, customPageName, "Qualify Prospect", 30, 40);
+                    Common.openCustomPage(primaryControl, customPageName, "Qualify Prospect", 45, 50, "");
                 }
                 catch (error) {
                     console.log(`Qualify error`, error);
@@ -122,6 +122,7 @@ var P365I_CRM;
                 Xrm.WebApi.execute(execute_p365i_CreateQuotefromOpp_Request).then(function success(response) {
                     if (response.ok) {
                         console.log("Success");
+                        primaryControl.data.refresh(false);
                     }
                 }).catch(function (error) {
                     console.log(error.message);
@@ -129,9 +130,33 @@ var P365I_CRM;
             }
             Quote.CreateQuoteFromOpp = CreateQuoteFromOpp;
         })(Quote = Ribbon.Quote || (Ribbon.Quote = {}));
+        let Opportunity;
+        (function (Opportunity) {
+            async function CloseOpportunity(primaryControl, customPageName, action) {
+                console.log(`Function CloseOpportunity Triggered`);
+                try {
+                    if (!primaryControl) {
+                        console.log('Primary Control not present, abort');
+                    }
+                    const formContext = primaryControl;
+                    if (P365I_CRM.Common.Helpers.formDirty(formContext)) {
+                        return;
+                    }
+                    Common.openCustomPage(primaryControl, customPageName, "Close Opportunity", 45, 55, action);
+                }
+                catch (error) {
+                    console.log(`Close error`, error);
+                    P365I_CRM.Common.Helpers.displayErrorMessage(error);
+                }
+                finally {
+                    console.log(`Close finally`);
+                }
+            }
+            Opportunity.CloseOpportunity = CloseOpportunity;
+        })(Opportunity = Ribbon.Opportunity || (Ribbon.Opportunity = {}));
         let OpportunityProduct;
         (function (OpportunityProduct) {
-            async function DeleteOpportunityProduct(primaryControl) {
+            async function DeleteOpportunityProduct(primaryControl, selectedControl) {
                 console.log(`Function DeleteOpportunityProduct Triggered`);
                 if (!primaryControl) {
                     console.log('Primary Control not present, abort');
@@ -141,25 +166,40 @@ var P365I_CRM;
                 if (confirmAction.confirmed !== true) {
                     return;
                 }
-                var recordId = P365I_CRM.Common.Helpers.cleanID(primaryControl.data.entity.getId());
-                var execute_p365i_CreateQuotefromOpp_Request = {
-                    entity: { entityType: "p365i_opportunity", id: recordId },
-                    getMetadata: function () {
-                        return {
-                            boundParameter: "entity",
-                            parameterTypes: {
-                                entity: { typeName: "mscrm.p365i_opportunity", structuralProperty: 5 }
-                            },
-                            operationType: 0, operationName: "p365i_CreateQuotefromOpp"
-                        };
-                    }
-                };
-                Xrm.WebApi.execute(execute_p365i_CreateQuotefromOpp_Request).then(function success(response) {
-                    if (response.ok) {
-                        console.log("Success");
-                    }
-                }).catch(function (error) {
-                    console.log(error.message);
+                let recordId = selectedControl[0];
+                recordId = P365I_CRM.Common.Helpers.cleanID(recordId);
+                Xrm.Utility.showProgressIndicator("Deleting");
+                return new Promise(function (resolve, reject) {
+                    const execute_p365i_DeleteProductOpportunity_Request = {
+                        DeleteProductOpportunity_recordId: recordId,
+                        getMetadata: function () {
+                            return {
+                                boundParameter: null,
+                                parameterTypes: {
+                                    DeleteProductOpportunity_recordId: { typeName: "Edm.String", structuralProperty: 1 }
+                                },
+                                operationType: 0, operationName: "p365i_DeleteProductOpportunity"
+                            };
+                        }
+                    };
+                    Xrm.WebApi.online.execute(execute_p365i_DeleteProductOpportunity_Request).then(function success(response) {
+                        if (response.ok) {
+                            response.json().then(function (results) {
+                                debugger;
+                                const DeleteProductOpportunity_RecordIdDeleted = results["DeleteProductOpportunity_RecordIdDeleted"];
+                                primaryControl.getParentForm().data.refresh(false);
+                            });
+                            resolve(response);
+                        }
+                    }).then(function (responseBody) {
+                        const result = responseBody;
+                        console.log(result);
+                        Xrm.Utility.closeProgressIndicator();
+                    }).catch(function (error) {
+                        console.log(error.message);
+                        Xrm.Utility.closeProgressIndicator();
+                        reject(error);
+                    });
                 });
             }
             OpportunityProduct.DeleteOpportunityProduct = DeleteOpportunityProduct;

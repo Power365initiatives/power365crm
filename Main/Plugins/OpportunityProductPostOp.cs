@@ -24,22 +24,30 @@ namespace P365I_CRM.Sales.Plugins
             var message = context.MessageName.ToLower();
 
             tracingService.Trace("Start OpportunityProductPostOp");
-
-            if (context.Depth > 1)
-                return;
-
-            var target = (Entity)context.InputParameters["Target"];
+                        
             var opportunityProductHandler = new OpportunityProductHandler(tracingService, service);
 
             if (message == "create")
             {
+                if (context.Depth > 1)
+                    return;
+
+                var target = (Entity)context.InputParameters["Target"];
                 opportunityProductHandler.UpdateOpportunityDetailAmount(target, message);
             }
             else if (message == "update")
             {
+                if (context.Depth > 1)
+                    return;
+
                 var postImage = context.PostEntityImages != null && context.PostEntityImages.Contains("PostImage") ? (Entity)context.PostEntityImages["PostImage"] : new Entity();
                 opportunityProductHandler.UpdateOpportunityDetailAmount(postImage, string.Empty);
-            }                
+            }
+            else if (message == "delete")
+            {
+                var preImage = context.PreEntityImages != null && context.PreEntityImages.Contains("PreImage") ? (Entity)context.PreEntityImages["PreImage"] : new Entity();
+                opportunityProductHandler.UpdateOpportunityDetailAmount(preImage, message);
+            }
 
             tracingService.Trace("End OpportunityProductPostOp");
         }        

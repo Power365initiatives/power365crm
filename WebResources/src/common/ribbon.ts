@@ -4,7 +4,7 @@ namespace P365I_CRM.Ribbon {
 
     export namespace Common {
 
-        export async function openCustomPage(primaryControl: Xrm.FormContext, customPageName: string, customPageTitle: string | undefined, width: number, height: number) {
+        export async function openCustomPage(primaryControl: Xrm.FormContext, customPageName: string, customPageTitle: string | undefined, width: number, height: number, action: string) {
             console.log(`Ribbon Function openCustomPage Triggered`);
 
             //Discussion to have the constructs in here or in the helper function. What if the primarycontrol and/or other input params are not provided? Not validated here, but in helper.
@@ -21,7 +21,7 @@ namespace P365I_CRM.Ribbon {
                 pageType: "custom",
                 name: customPageName,
                 entityName: primaryControl.data.entity.getEntityName(),
-                recordId: P365I_CRM.Common.Helpers.cleanID(primaryControl.data.entity.getId()),
+                recordId: P365I_CRM.Common.Helpers.cleanID(primaryControl.data.entity.getId()) + "|" + action,
             };
 
             const customPageResult: any = await P365I_CRM.Common.Helpers.openCustomPage(primaryControl, customPage, navigationOptions);
@@ -46,13 +46,7 @@ namespace P365I_CRM.Ribbon {
                     return;
                 }
 
-                /*const confirmStrings: Xrm.Navigation.ConfirmStrings = { title: "Qualify Prospect", text: "Are you sure you would like to qualify this prospect?" };
-                let confirmAction: Xrm.Navigation.ConfirmResult = await P365I_CRM.Common.Helpers.confirmDialog(confirmStrings, undefined).catch((e: any) => console.log('Error:', e.message)) || new Object() as Xrm.Navigation.ConfirmResult;
-                if (confirmAction.confirmed !== true) {
-                    return;
-                }*/
-
-                Common.openCustomPage(primaryControl, customPageName,"Qualify Prospect", 30, 40);
+                Common.openCustomPage(primaryControl, customPageName, "Qualify Prospect", 45, 50, "");
             }
             catch (error) {
                 console.log(`Qualify error`, error);
@@ -151,7 +145,10 @@ namespace P365I_CRM.Ribbon {
             //@ts-ignore
             Xrm.WebApi.execute(execute_p365i_CreateQuotefromOpp_Request).then(
                 function success(response: any) {
-                    if (response.ok) { console.log("Success"); }
+                    if (response.ok) {
+                        console.log("Success");
+                        primaryControl.data.refresh(false);
+                    }
                 }
             ).catch(function (error: any) {
                 console.log(error.message);
@@ -159,44 +156,86 @@ namespace P365I_CRM.Ribbon {
         }
     }
 
+    export namespace Opportunity {
+        export async function CloseOpportunity(primaryControl: Xrm.FormContext, customPageName: string, action: string) {
+            console.log(`Function CloseOpportunity Triggered`);
+
+            try {
+                if (!primaryControl) {
+                    console.log('Primary Control not present, abort');
+                }
+                const formContext = primaryControl;
+                if (P365I_CRM.Common.Helpers.formDirty(formContext)) {
+                    return;
+                }
+
+                Common.openCustomPage(primaryControl, customPageName, "Close Opportunity", 45, 55, action);
+            }
+            catch (error) {
+                console.log(`Close error`, error);
+                P365I_CRM.Common.Helpers.displayErrorMessage(error);
+            }
+            finally {
+                console.log(`Close finally`);
+            }
+        }
+    }
+
     export namespace OpportunityProduct {
 
-        export async function DeleteOpportunityProduct(primaryControl: Xrm.FormContext) {
+        export async function DeleteOpportunityProduct(primaryControl: any, selectedControl : any)
+        {
             console.log(`Function DeleteOpportunityProduct Triggered`);
-
+            
             if (!primaryControl) {
                 console.log('Primary Control not present, abort');
             }
 
             const confirmStrings: Xrm.Navigation.ConfirmStrings = { title: "Delete opportunity product", text: "Are you sure you want to delete the selected product?" };
             let confirmAction: Xrm.Navigation.ConfirmResult = await P365I_CRM.Common.Helpers.confirmDialog(confirmStrings, undefined).catch((e: any) => console.log('Error:', e.message)) || new Object() as Xrm.Navigation.ConfirmResult;
-            if (confirmAction.confirmed !== true) {
+            if (confirmAction.confirmed !== true) {                
                 return;
             }
+ 
+            let recordId = selectedControl[0];
+            recordId = P365I_CRM.Common.Helpers.cleanID(recordId);
+            Xrm.Utility.showProgressIndicator("Deleting");
+            return new Promise<Xrm.ExecuteResponse>(function (resolve, reject) {
+                const execute_p365i_DeleteProductOpportunity_Request = {
+                    // Parameters
+                    DeleteProductOpportunity_recordId: recordId, // Edm.String
 
-            var recordId = P365I_CRM.Common.Helpers.cleanID(primaryControl.data.entity.getId());
+                    getMetadata: function () {
+                        return {
+                            boundParameter: null,
+                            parameterTypes: {
+                                DeleteProductOpportunity_recordId: { typeName: "Edm.String", structuralProperty: 1 }
+                            },
+                            operationType: 0, operationName: "p365i_DeleteProductOpportunity"
+                        };
+                    }
+                };
 
-            var execute_p365i_CreateQuotefromOpp_Request = {
-                // Parameters
-                entity: { entityType: "p365i_opportunity", id: recordId }, // entity
-
-                getMetadata: function () {
-                    return {
-                        boundParameter: "entity",
-                        parameterTypes: {
-                            entity: { typeName: "mscrm.p365i_opportunity", structuralProperty: 5 }
-                        },
-                        operationType: 0, operationName: "p365i_CreateQuotefromOpp"
-                    };
-                }
-            };
-            //@ts-ignore
-            Xrm.WebApi.execute(execute_p365i_CreateQuotefromOpp_Request).then(
-                function success(response: any) {
-                    if (response.ok) { console.log("Success"); }
-                }
-            ).catch(function (error: any) {
-                console.log(error.message);
+                Xrm.WebApi.online.execute(execute_p365i_DeleteProductOpportunity_Request).then(
+                    function success(response) {
+                        if (response.ok) {
+                            response.json().then(function (results) {
+                                debugger;
+                                const DeleteProductOpportunity_RecordIdDeleted = results["DeleteProductOpportunity_RecordIdDeleted"];
+                                primaryControl.getParentForm().data.refresh(false);
+                            });
+                            resolve(response);
+                        }
+                    }
+                ).then(function (responseBody) {
+                    const result = responseBody;
+                    console.log(result);
+                    Xrm.Utility.closeProgressIndicator();
+                }).catch(function (error) {
+                    console.log(error.message);
+                    Xrm.Utility.closeProgressIndicator();
+                    reject(error);
+                });
             });
         }
     }

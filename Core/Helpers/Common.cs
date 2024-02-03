@@ -774,6 +774,18 @@ namespace P365I_CRM.Core.Helpers
                     tracingService.Trace($"Execute Multiple Request {i} of {splittedLists.Count}");
                     ExecuteMultipleResponse responseWithResults = (ExecuteMultipleResponse)service.Execute(execRequest);
                     tracingService.Trace($"Multiple Request Executed. Is faulted : {responseWithResults.IsFaulted}");
+                    if (responseWithResults.IsFaulted)
+                    {
+                        foreach (var responseItem in responseWithResults.Responses)
+                        {
+                            if (responseItem.Fault != null)
+                            {
+                                Entity dataSourceRecord = (Entity)execRequest.Requests[responseItem.RequestIndex].Parameters["Target"];
+                                var message = responseItem.Fault.Message;
+                                tracingService.Trace($"Faulted message: {message}");
+                            }
+                        }
+                    }
                     i++;
                 }
                 catch (Exception ex)

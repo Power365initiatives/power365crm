@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Xml.Linq;
@@ -53,6 +54,8 @@ namespace P365I_CRM.Core.Handlers
                 }
                 else
                     opportunityProduct["p365i_product"] = "new product";
+
+                _service.Update(opportunityProduct);
             }
 
             Guid parentId = opportunityProduct.GetAttributeValue<EntityReference>("p365i_opportunity").Id;
@@ -68,19 +71,18 @@ namespace P365I_CRM.Core.Handlers
             opportunity.Id = parentId;
             opportunity.Attributes["p365i_detailedamount"] = new Money(detailedAmount);
             
-            _service.Update(opportunityProduct);
             _service.Update(opportunity);
 
             _tracingService.Trace("End UpdateOpportunityDetailAmount");
         }
 
-        public void DeleteOpportunityProduct(Guid recordId, Entity opportunity, IPluginExecutionContext context)
+        public void DeleteOpportunityProduct(Guid recordId, IPluginExecutionContext context)
         {
             _tracingService.Trace("Start DeleteOpportunityProduct");
-
+            var opportunityProduct = _service.Retrieve("p365i_opportunityproduct", recordId, new Microsoft.Xrm.Sdk.Query.ColumnSet(true));
             _service.Delete("p365i_opportunityproduct", recordId);
-            UpdateOpportunityDetailAmount(opportunity, string.Empty);
-
+            
+            Thread.Sleep(3000);
             context.OutputParameters["DeleteProductOpportunity_RecordIdDeleted"] = recordId.ToString();
 
             _tracingService.Trace("End DeleteOpportunityProduct");
