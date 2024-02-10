@@ -20,10 +20,11 @@ namespace P365I_CRM.Sales.CustomAPIs
 
             string oppId = (string)context.InputParameters["CloseOpportunity_OppId"];
             string action = (string)context.InputParameters["CloseOpportunity_action"];
+            string lostStatusReason = (string)context.InputParameters["CloseOpportunity_LostStatusReason"];
 
             Entity opportunity = service.Retrieve("p365i_opportunity", new Guid(oppId), new Microsoft.Xrm.Sdk.Query.ColumnSet(true));
             var oppHandler = new Core.Handlers.OpportunityHandler(tracingService, service);
-            oppHandler.CloseOpportunity(opportunity, action, context);
+            oppHandler.CloseOpportunity(opportunity, action, lostStatusReason, context);
 
             tracingService.Trace("End Custom API CloseOpportunity");
         }

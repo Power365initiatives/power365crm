@@ -1,6 +1,7 @@
 ﻿using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
+using P365I_CRM.Core.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace P365I_CRM.Core.Handlers
             _service = service;
         }
 
-        public void CreateQuoteFromOpportunity(EntityReference oppRef, IPluginExecutionContext context)
+        public async void CreateQuoteFromOpportunity(EntityReference oppRef, IPluginExecutionContext context)
         {
             _tracingService.Trace("Start CreateQuoteFromOpportunity");
 
@@ -93,12 +94,13 @@ namespace P365I_CRM.Core.Handlers
             _tracingService.Trace("End CreateQuoteLinesFromCollection");
         }
 
-        public void CloseOpportunity(Entity opportunity, string action, IPluginExecutionContext context)
+        public void CloseOpportunity(Entity opportunity, string action, string lostStatusReason, IPluginExecutionContext context)
         {
             _tracingService.Trace("Start CloseOpportunity");
 
             requestCollection = new OrganizationRequestCollection();
             var openQuotes = GetOpenQuotes(opportunity.ToEntityReference());
+            
             if (action == "win")
             {
                 if (openQuotes.Entities.Count > 1)
@@ -108,20 +110,20 @@ namespace P365I_CRM.Core.Handlers
                 else if (openQuotes.Entities.Count == 1)
                 {
                     Entity quote = openQuotes.Entities[0];
-                    quote.Attributes["statecode"] = new OptionSetValue(1); //Inactive
-                    quote.Attributes["statuscode"] = new OptionSetValue(2); //Inactive
+                    quote.Attributes["statecode"] = new OptionSetValue((int)QuoteState.Inactive);
+                    quote.Attributes["statuscode"] = new OptionSetValue((int)QuoteStatus.Accepted);
                     requestCollection.Add(new UpdateRequest() { Target = quote });
 
-                    opportunity.Attributes["statecode"] = new OptionSetValue(1); //Inactive
-                    opportunity.Attributes["statuscode"] = new OptionSetValue(2); //Won
+                    opportunity.Attributes["statecode"] = new OptionSetValue((int)OpportunityState.Inactive);
+                    opportunity.Attributes["statuscode"] = new OptionSetValue((int)OpportunityStatus.Won);
                     requestCollection.Add(new UpdateRequest() { Target = opportunity });
 
                     context.OutputParameters["CloseOpportunity_resultMessage"] = "Opportunity won";
                 }
                 else //0 open quotes
                 {
-                    opportunity.Attributes["statecode"] = new OptionSetValue(1); //Inactive
-                    opportunity.Attributes["statuscode"] = new OptionSetValue(2); //Won
+                    opportunity.Attributes["statecode"] = new OptionSetValue((int)OpportunityState.Inactive);
+                    opportunity.Attributes["statuscode"] = new OptionSetValue((int)OpportunityStatus.Won);
                     requestCollection.Add(new UpdateRequest() { Target = opportunity });
 
                     context.OutputParameters["CloseOpportunity_resultMessage"] = "Opportunity won";
@@ -131,13 +133,18 @@ namespace P365I_CRM.Core.Handlers
             {
                 foreach (var quoteToClose in openQuotes.Entities)
                 {
-                    quoteToClose.Attributes["statecode"] = new OptionSetValue(1); //Inactive
-                    quoteToClose.Attributes["statuscode"] = new OptionSetValue(2); //Inactive
+                    quoteToClose.Attributes["statecode"] = new OptionSetValue((int)QuoteState.Inactive); 
+                    quoteToClose.Attributes["statuscode"] = new OptionSetValue((int)QuoteStatus.Canceled);
                     requestCollection.Add(new UpdateRequest() { Target = quoteToClose });
                 }
 
-                opportunity.Attributes["statecode"] = new OptionSetValue(1); //Inactive
-                opportunity.Attributes["statuscode"] = new OptionSetValue(446310002); //Lost
+                opportunity.Attributes["statecode"] = new OptionSetValue((int)OpportunityState.Inactive);
+
+                if (lostStatusReason == "Lost")
+                    opportunity.Attributes["statuscode"] = new OptionSetValue((int)OpportunityStatus.Lost);
+                else if (lostStatusReason == "Canceled")
+                    opportunity.Attributes["statuscode"] = new OptionSetValue((int)OpportunityStatus.Canceled);
+
                 requestCollection.Add(new UpdateRequest() { Target = opportunity });
 
                 context.OutputParameters["CloseOpportunity_resultMessage"] = "Opportunity lost";

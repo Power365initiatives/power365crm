@@ -71,6 +71,12 @@ namespace P365I_CRM.Ribbon {
                     return;
                 }
 
+                const confirmStrings: Xrm.Navigation.ConfirmStrings = { title: "Disqualify Prospect", text: "Are you sure you want to disqualify this prospect?" };
+                let confirmAction: Xrm.Navigation.ConfirmResult = await P365I_CRM.Common.Helpers.confirmDialog(confirmStrings, undefined).catch((e: any) => console.log('Error:', e.message)) || new Object() as Xrm.Navigation.ConfirmResult;
+                if (confirmAction.confirmed !== true) {
+                    return;
+                }
+
                 var recordId = P365I_CRM.Common.Helpers.cleanID(primaryControl.data.entity.getId());
                 var record = {};
                 //@ts-ignore

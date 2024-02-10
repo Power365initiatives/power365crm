@@ -108,6 +108,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\QuoteStatus.cs" />
+    <Compile Include="Enums\OpportunityStatus.cs" />
     <Compile Include="Enums\ProspectStatus.cs" />
     <Compile Include="Extensions\List.cs" />
     <Compile Include="Handlers\OpportunityProductHandler.cs" />

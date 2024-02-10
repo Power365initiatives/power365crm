@@ -23,7 +23,7 @@ namespace P365I_CRM.Console
             var context = new Core.P365I_CRM.Core.Helpers.Common.PluginContext();
 
 
-            Entity OppProduct = service.Retrieve("p365i_opportunityproduct", new Guid("e1cf2578-a4a8-ee11-be37-00224840d636"), new ColumnSet(true));
+            /*Entity OppProduct = service.Retrieve("p365i_opportunityproduct", new Guid("e1cf2578-a4a8-ee11-be37-00224840d636"), new ColumnSet(true));
             //calculate Detailed Amount
             EntityCollection oppProducts = QuerybyAttribute(service, tracingService, "p365i_opportunityproduct", new Microsoft.Xrm.Sdk.Query.ColumnSet("p365i_totalcost"), "p365i_opportunity", (OppProduct.GetAttributeValue<EntityReference>("p365i_opportunity")).Id.ToString());
             tracingService.Trace("oppProducts count: " + oppProducts.Entities.Count);
@@ -39,12 +39,12 @@ namespace P365I_CRM.Console
             Entity opp = new Entity("p365i_opportunity");
             opp.Id = ParentId;
             opp.Attributes["p365i_detailedamount"] = new Money(detailedAmount);
-            service.Update(opp);
+            service.Update(opp);*/
 
 
-            Entity prospect = service.Retrieve("p365i_prospect", new Guid("d483fe39-cc49-4379-b025-f318312209ab"), new ColumnSet(true));
+            Entity opportunity = service.Retrieve("p365i_prospect", new Guid("c3d54c3f-0180-4029-a7dc-258750015f25"), new ColumnSet(true));
             var prospectHandler = new Core.P365I_CRM.Core.Handlers.ProspectHandler(tracingService, service);
-            prospectHandler.QualifyProspect(prospect, true, true, true, context);
+            prospectHandler.UpdateBPFStage(opportunity.ToEntityReference());
         }
 
         public static EntityCollection QuerybyAttribute(IOrganizationService service, ITracingService tracingServive, String entityName, ColumnSet columns, String attributeName, String attributeValue)

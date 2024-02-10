@@ -61,6 +61,11 @@ var P365I_CRM;
                     if (P365I_CRM.Common.Helpers.formDirty(formContext)) {
                         return;
                     }
+                    const confirmStrings = { title: "Disqualify Prospect", text: "Are you sure you want to disqualify this prospect?" };
+                    let confirmAction = await P365I_CRM.Common.Helpers.confirmDialog(confirmStrings, undefined).catch((e) => console.log('Error:', e.message)) || new Object();
+                    if (confirmAction.confirmed !== true) {
+                        return;
+                    }
                     var recordId = P365I_CRM.Common.Helpers.cleanID(primaryControl.data.entity.getId());
                     var record = {};
                     record.statuscode = 2;
