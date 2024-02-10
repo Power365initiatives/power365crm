@@ -50,6 +50,6 @@ namespace P365I_CRM.Sales.Plugins
             }
 
             tracingService.Trace("End OpportunityProductPostOp");
-        }        
+        }
     }   
 }
