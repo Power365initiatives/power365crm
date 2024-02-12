@@ -115,6 +115,7 @@
     <Compile Include="Handlers\OpportunityProductHandler.cs" />
     <Compile Include="Handlers\ProspectHandler.cs" />
     <Compile Include="Handlers\OpportunityHandler.cs" />
+    <Compile Include="Handlers\QuoteProductHandler.cs" />
     <Compile Include="Helpers\Common.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

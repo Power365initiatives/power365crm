@@ -119,6 +119,7 @@
     <Compile Include="CustomAPIs\QualifyProspect.cs" />
     <Compile Include="Plugins\OpportunityPostOp.cs" />
     <Compile Include="Plugins\OpportunityProductPostOp.cs" />
+    <Compile Include="Plugins\QuoteProductPostOp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
