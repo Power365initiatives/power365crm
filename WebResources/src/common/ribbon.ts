@@ -80,9 +80,9 @@ namespace P365I_CRM.Ribbon {
                 var recordId = P365I_CRM.Common.Helpers.cleanID(primaryControl.data.entity.getId());
                 var record = {};
                 //@ts-ignore
-                record.statuscode = 2; // Status
+                record.statuscode = P365I_CRM.Common.Enums.Prospect.StatusCode.Disqualified; // 2
                 //@ts-ignore
-                record.statecode = 1; // State
+                record.statecode = P365I_CRM.Common.Enums.Prospect.StateCode.Completed; // 1
 
                 Xrm.WebApi.updateRecord("p365i_prospect", recordId, record).then(
                     function success(result) {

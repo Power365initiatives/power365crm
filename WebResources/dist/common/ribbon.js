@@ -68,8 +68,8 @@ var P365I_CRM;
                     }
                     var recordId = P365I_CRM.Common.Helpers.cleanID(primaryControl.data.entity.getId());
                     var record = {};
-                    record.statuscode = 2;
-                    record.statecode = 1;
+                    record.statuscode = P365I_CRM.Common.Enums.Prospect.StatusCode.Disqualified;
+                    record.statecode = P365I_CRM.Common.Enums.Prospect.StateCode.Completed;
                     Xrm.WebApi.updateRecord("p365i_prospect", recordId, record).then(function success(result) {
                         primaryControl.data.refresh(false);
                     }, function (error) {
