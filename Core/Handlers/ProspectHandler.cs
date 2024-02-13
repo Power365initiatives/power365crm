@@ -72,7 +72,7 @@ namespace P365I_CRM.Core.Handlers
 
             if (entityTarget == "account")
             {
-                if (!prospect.Contains("p365i_parentaccountid"))
+                if (!prospect.Contains("p365i_parentaccountid") && prospect.Contains("p365i_company"))
                 {
                     Entity account = Helpers.Common.CreateEntityfromMapping(_service, prospectRef, entityTarget, TargetFieldType.All);
                     account.Id = Guid.NewGuid();
@@ -101,7 +101,7 @@ namespace P365I_CRM.Core.Handlers
                         {
                             EntityReference accountRef2 = prospect.GetAttributeValue<EntityReference>("p365i_parentaccountid");
                             contact.Attributes.Add("parentcustomerid", accountRef2);
-                            contact.Attributes.Add("accountid", accountRef2);                        
+                            contact.Attributes.Add("accountid", accountRef2);
                         }
                     }
                     requestCollection.Add(new CreateRequest() { Target = contact });
