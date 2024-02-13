@@ -81,8 +81,12 @@ namespace P365I_CRM.Core.Handlers
                     _tracingService.Trace("Account added to collection");
                     return account.ToEntityReference();
                 }
-                else
+                else if(prospect.Contains("p365i_parentaccountid"))
+                {
                     return prospect.GetAttributeValue<EntityReference>("p365i_parentaccountid");
+                }
+                else
+                    return new EntityReference();
             }
             else if (entityTarget == "contact")
             {
