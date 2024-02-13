@@ -78,9 +78,6 @@ namespace P365I_CRM.Common.Helpers {
     export function cleanID(input: string) {
         return input.substring(0, 1) === "{" ? input.substring(1, 37) : input;
     }
-    export function existControl(formContext: Xrm.FormContext, attName: string) {
-        return formContext.getControl(attName) ? true : false;
-    }
 
     export function getDatabyFetchXML(entityName: string, fetchXml: string) {
         return new Promise<Xrm.RetrieveMultipleResult>(function (resolve, reject) {
@@ -98,24 +95,7 @@ namespace P365I_CRM.Common.Helpers {
                 reject(null);
             }
         });
-    }
-
-    export async function getEnvVariables(envDefName: string) {
-        const fetchXml: string =
-            `<fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false">
-              <entity name="environmentvariablevalue">
-                <attribute name="environmentvariablevalueid" />
-                <attribute name="value" />
-                <link-entity name="environmentvariabledefinition" from="environmentvariabledefinitionid" to="environmentvariabledefinitionid" link-type="inner" alias="envvardef">
-                  <filter type="and">
-                    <condition attribute="schemaname" operator="eq" value="${envDefName}" />
-                  </filter>
-                </link-entity>
-              </entity>
-            </fetch>`;
-
-        return await getDatabyFetchXML("environmentvariablevalue", fetchXml);
-    }
+    }   
 
     export function openCustomPage(primaryControl: Xrm.FormContext, customPage: Xrm.Navigation.CustomPage, navigationOptions: Xrm.Navigation.NavigationOptions | undefined) {
 

@@ -34,7 +34,7 @@ bld/
 [Ll]ogs/
 
 # Console Project
-**/P365I_CRM.ConsoleApp/*
+P365I_CRM.ConsoleApp/
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/

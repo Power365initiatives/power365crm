@@ -67,10 +67,6 @@ var P365I_CRM;
                 return input.substring(0, 1) === "{" ? input.substring(1, 37) : input;
             }
             Helpers.cleanID = cleanID;
-            function existControl(formContext, attName) {
-                return formContext.getControl(attName) ? true : false;
-            }
-            Helpers.existControl = existControl;
             function getDatabyFetchXML(entityName, fetchXml) {
                 return new Promise(function (resolve, reject) {
                     if (entityName && fetchXml) {
@@ -86,21 +82,6 @@ var P365I_CRM;
                 });
             }
             Helpers.getDatabyFetchXML = getDatabyFetchXML;
-            async function getEnvVariables(envDefName) {
-                const fetchXml = `<fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false">
-              <entity name="environmentvariablevalue">
-                <attribute name="environmentvariablevalueid" />
-                <attribute name="value" />
-                <link-entity name="environmentvariabledefinition" from="environmentvariabledefinitionid" to="environmentvariabledefinitionid" link-type="inner" alias="envvardef">
-                  <filter type="and">
-                    <condition attribute="schemaname" operator="eq" value="${envDefName}" />
-                  </filter>
-                </link-entity>
-              </entity>
-            </fetch>`;
-                return await getDatabyFetchXML("environmentvariablevalue", fetchXml);
-            }
-            Helpers.getEnvVariables = getEnvVariables;
             function openCustomPage(primaryControl, customPage, navigationOptions) {
                 console.log(`Function openCustomPage Triggered`);
                 return new Promise(function (resolve, reject) {
