@@ -27,6 +27,6 @@ Objects present in the solution:
 
 1. Download up-to-date release
 2. Install Core solution with common components first
-3. Install specific producto solution
+3. Install specific product solution
 
 https://github.com/Power365initiatives/power365crm/releases
