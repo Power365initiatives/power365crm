@@ -24,7 +24,7 @@ Solution|Author(s)
 --------|---------
 Power 365 CRM | [Nicolás Fernández](https://www.linkedin.com/in/nfernandezba/)
 Power 365 CRM | [Ignacio Barrios](https://www.linkedin.com/in/ignaciobarriosantos/)
-Power 365 CRM | [Wilmer Alcivar][LinkedIn](https://www.linkedin.com/in/wilmeralcivar/) - [Github](https://github.com/walcivar)
+Power 365 CRM | [Wilmer Alcivar](https://www.linkedin.com/in/wilmeralcivar/) - [Github](https://github.com/walcivar)
 
 ### Version history
 
