@@ -68,6 +68,9 @@ Objects present in the solution:
    
 https://github.com/Power365initiatives/power365crm/releases
 
+### User manual
+For more information on how to start using this solution, please visit the [Power365CRM Wiki](https://github.com/Power365initiatives/power365crm/wiki)
+
 ### Disclaimer
 
 **THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.**
