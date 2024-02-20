@@ -54,7 +54,7 @@ Objects present in the solution:
 
 | Rank | Languages |
 |-----:|-----------|
-|WebResources| JavaScript|
+|WebResources| TypeScript/JavaScript|
 |Custom APIs| CloseOpportunity, CreateQuoteFromOpp, QualifyProspect |
 |Plugins| OpportunityPostOp, OpportunityProductPostOp, QUoteProductPostOp |
 
