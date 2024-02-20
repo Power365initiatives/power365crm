@@ -77,7 +77,14 @@ In this release v1.0 you will be able to manage your entire sales process from P
 3. Automatic record creation (Account, Contact and Opportunity) when qualify a Prospect
 4. Automatic Quote creation including its quote products
 5. Close Opportunity as Won or Lost
-   
+
+### Solution Componentes
+
+Solution|Components
+--------|---------
+Power365CRMCore | 6 tables, 6 web resources
+Power365CRMSales | 1 Model Driven App (Sales Center), 2 Custom Pages, 3 Custom APIs, 1 Plugin assembly, 18 tables, 8 web resources
+
 ### User manual
 For more information on how to start using this solution, please visit the [Power365CRM Wiki](https://github.com/Power365initiatives/power365crm/wiki)
 
