@@ -52,9 +52,9 @@ Objects present in the solution:
 <details>
 <summary>Development</summary>
 
-| Rank | Languages |
+| Rank | Name |
 |-----:|-----------|
-|WebResources| TypeScript/JavaScript|
+|WebResources| opportunity, quote, enums, helpers, ribbon |
 |Custom APIs| CloseOpportunity, CreateQuoteFromOpp, QualifyProspect |
 |Plugins| OpportunityPostOp, OpportunityProductPostOp, QUoteProductPostOp |
 
