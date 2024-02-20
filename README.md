@@ -2,7 +2,7 @@
 Power 365 CRM is a community solution based on Microsoft Dataverse low-code and pro-code.
 In this release v1.0 you will be able to manage your entire sales process from Prosect to Quote. This will include management of opportunities during the sales process and autonomous opportunity amount calculation.
 
-https://github.com/Power365initiatives/power365crm/blob/master/assets/Power365CRMSales.gif?raw=true
+https://github.com/Power365initiatives/power365crm/raw/master/assets/Power365CRMSales.gif
 
 ### Applies to
 
