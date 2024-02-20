@@ -64,6 +64,8 @@ Objects present in the solution:
 2. Install Core solution with common components first
 3. Install specific product solution
 4. Set the user language to English
+
+   
 https://github.com/Power365initiatives/power365crm/releases
 
 ### Disclaimer
