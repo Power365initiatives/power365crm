@@ -60,7 +60,7 @@ Objects present in the solution:
 
 </details>
 
-### Installation process
+### Minimal path to awesome
 
 1. Download up-to-date release
 2. Install Core solution with common components first
@@ -70,8 +70,23 @@ Objects present in the solution:
    
 https://github.com/Power365initiatives/power365crm/releases
 
+### Features
+In this release v1.0 you will be able to manage your entire sales process from Prosect to Quote. This will include management of opportunities during the sales process and autonomous opportunity amount calculation.
+1. Create a Prospect
+2. Qualify a Prospect
+3. Automatic record creation (Account, Contact and Opportunity) when qualify a Prospect
+4. Automatic Quote creation including its quote products
+5. Close Opportunity as Won or Lost
+   
 ### User manual
 For more information on how to start using this solution, please visit the [Power365CRM Wiki](https://github.com/Power365initiatives/power365crm/wiki)
+
+### Help
+Note: don't worry about this section, we'll update the links.
+We do not support samples, but this community is always willing to help, and we want to improve these samples. We use GitHub to track issues, which makes it easy for community members to volunteer their time and help resolve issues.
+If you encounter any issues while using this sample, you can [create a new issue]([https://github.com/Power365initiatives/power365crm/issues](https://github.com/pnp/powerapps-samples/issues/new?assignees=&labels=Needs%3A+Triage+%3Amag%3A%2Ctype%3Abug-suspected&template=bug-report.yml&sample=YOURSAMPLENAME&authors=@YOURGITHUBUSERNAME&title=YOURSAMPLENAME%20-%20))
+For questions regarding this sample, [create a new question](https://github.com/pnp/powerapps-samples/issues/new?assignees=&labels=Needs%3A+Triage+%3Amag%3A%2Ctype%3Abug-suspected&template=question.yml&sample=YOURSAMPLENAME&authors=@YOURGITHUBUSERNAME&title=YOURSAMPLENAME%20-%20)
+Finally, if you have an idea for improvement, [make a suggestion](https://github.com/pnp/powerapps-samples/issues/new?assignees=&labels=Needs%3A+Triage+%3Amag%3A%2Ctype%3Abug-suspected&template=suggestion.yml&sample=YOURSAMPLENAME&authors=@YOURGITHUBUSERNAME&title=YOURSAMPLENAME%20-%20)
 
 ### Disclaimer
 
