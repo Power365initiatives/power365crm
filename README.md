@@ -5,7 +5,9 @@ In this release v1.0 you will be able to manage your entire sales process from P
 ### Applies to
 
 [Microsoft Power Apps](https://learn.microsoft.com/en-us/power-apps/)
+
 [Model-Driven Power Apps](https://learn.microsoft.com/en-us/power-apps/maker/model-driven-apps/)
+
 [Custom Pages](https://learn.microsoft.com/en-us/power-apps/maker/model-driven-apps/model-app-page-overview)
 
 ### Compatibility
