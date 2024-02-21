@@ -127,6 +127,7 @@
     <None Include="ILMerge.props" />
     <None Include="key.snk" />
     <None Include="packages.config" />
+    <None Include="sgn.snk" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

@@ -29,9 +29,8 @@ namespace P365I_CRM.Sales.Plugins
 
             if (message == "create")
             {
-                if (context.Depth > 1)
+                if (context.Depth > 3)
                     return;
-
                 var target = (Entity)context.InputParameters["Target"];
                 quoteProductHandler.UpdateQuoteDetailAmount(target, message);
             }
