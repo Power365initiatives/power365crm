@@ -28,6 +28,8 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "WebResources", "WebResource
 		SlnRelativePath = "WebResources\"
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P365I_CRM.CS", "P365I_CRM.CS\P365I_CRM.CS.csproj", "{DAAECCF7-6294-48F9-8370-2DBED5929058}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,6 +48,10 @@ Global
 		{37F1C98E-A9AA-434D-B88E-DFB5E9ADB3F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37F1C98E-A9AA-434D-B88E-DFB5E9ADB3F7}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{37F1C98E-A9AA-434D-B88E-DFB5E9ADB3F7}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{DAAECCF7-6294-48F9-8370-2DBED5929058}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAAECCF7-6294-48F9-8370-2DBED5929058}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAAECCF7-6294-48F9-8370-2DBED5929058}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAAECCF7-6294-48F9-8370-2DBED5929058}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

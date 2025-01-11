@@ -23,6 +23,24 @@ var P365I_CRM;
                     StatusCode[StatusCode["Scheduled"] = 4] = "Scheduled";
                 })(StatusCode = Prospect.StatusCode || (Prospect.StatusCode = {}));
             })(Prospect = Enums.Prospect || (Enums.Prospect = {}));
+            let Incident;
+            (function (Incident) {
+                let IncidentStatus;
+                (function (IncidentStatus) {
+                    IncidentStatus[IncidentStatus["InProgress"] = 1] = "InProgress";
+                    IncidentStatus[IncidentStatus["OnHold"] = 446310001] = "OnHold";
+                    IncidentStatus[IncidentStatus["WaitingForDetails"] = 446310002] = "WaitingForDetails";
+                    IncidentStatus[IncidentStatus["Researching"] = 446310003] = "Researching";
+                    IncidentStatus[IncidentStatus["Inactive"] = 2] = "Inactive";
+                    IncidentStatus[IncidentStatus["Resolved"] = 446310004] = "Resolved";
+                    IncidentStatus[IncidentStatus["Canceled"] = 446310005] = "Canceled";
+                })(IncidentStatus = Incident.IncidentStatus || (Incident.IncidentStatus = {}));
+                let IncidentState;
+                (function (IncidentState) {
+                    IncidentState[IncidentState["Active"] = 0] = "Active";
+                    IncidentState[IncidentState["Inactive"] = 1] = "Inactive";
+                })(IncidentState = Incident.IncidentState || (Incident.IncidentState = {}));
+            })(Incident = Enums.Incident || (Enums.Incident = {}));
         })(Enums = Common.Enums || (Common.Enums = {}));
     })(Common = P365I_CRM.Common || (P365I_CRM.Common = {}));
 })(P365I_CRM || (P365I_CRM = {}));

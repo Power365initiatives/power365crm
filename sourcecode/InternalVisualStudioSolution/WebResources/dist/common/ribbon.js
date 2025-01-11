@@ -26,6 +26,90 @@ var P365I_CRM;
             }
             Common.openCustomPage = openCustomPage;
         })(Common = Ribbon.Common || (Ribbon.Common = {}));
+        let Incident;
+        (function (Incident) {
+            async function CloseIncident(primaryControl, customPageName, action) {
+                console.log(`Function CloseIncident Triggered`);
+                try {
+                    if (!primaryControl) {
+                        console.log('Primary Control not present, abort');
+                    }
+                    const formContext = primaryControl;
+                    if (P365I_CRM.Common.Helpers.formDirty(formContext)) {
+                        return;
+                    }
+                    debugger;
+                    const result = await GetOpenActivities(primaryControl);
+                    if (result.entities.length > 0) {
+                        const confirmStrings = { title: "Open Activities", text: "There are open activities for this incident. Confirming will result in cancelling all open activities" };
+                        let confirmAction = await P365I_CRM.Common.Helpers.confirmDialog(confirmStrings, undefined).catch((e) => console.log('Error:', e.message)) || new Object();
+                        if (confirmAction.confirmed !== true) {
+                            return;
+                        }
+                    }
+                    Common.openCustomPage(primaryControl, customPageName, "Close Incident", 45, 55, action);
+                }
+                catch (error) {
+                    console.log(`Close error`, error);
+                    P365I_CRM.Common.Helpers.displayErrorMessage(error);
+                }
+            }
+            Incident.CloseIncident = CloseIncident;
+            async function GetOpenActivities(primaryControl) {
+                console.log(`Function GetOpenActivities Triggered`);
+                const incidentId = P365I_CRM.Common.Helpers.cleanID(primaryControl.data.entity.getId());
+                const fetchXML = `<fetch>
+	                                <entity name='activitypointer'>
+		                                <attribute name='activityid' />
+		                                <attribute name='statecode' />
+		                                <attribute name='activitytypecode' />
+		                                <attribute name='statuscode' />
+		                                <filter type='and'>
+			                                <condition attribute='statecode' operator='eq' value='0' />
+		                                </filter>
+                                        <link-entity name="p365i_incident" from="p365i_incidentid" to="regardingobjectid">
+                                          <filter>
+                                            <condition attribute="p365i_incidentid" operator="eq" value="${incidentId}" />
+                                          </filter>
+                                        </link-entity>
+	                                </entity>
+                                </fetch>`;
+                const result = await P365I_CRM.Common.Helpers.getDatabyFetchXML("activitypointer", fetchXML);
+                return result;
+            }
+            Incident.GetOpenActivities = GetOpenActivities;
+            async function ReactivateIncident(primaryControl) {
+                console.log(`Function ReactivateIncident Triggered`);
+                try {
+                    if (!primaryControl) {
+                        console.log('Primary Control not present, abort');
+                    }
+                    const formContext = primaryControl;
+                    if (P365I_CRM.Common.Helpers.formDirty(formContext)) {
+                        return;
+                    }
+                    const confirmStrings = { title: "Reactivate Incident", text: "Are you sure you want to reactivate this incident?" };
+                    let confirmAction = await P365I_CRM.Common.Helpers.confirmDialog(confirmStrings, undefined).catch((e) => console.log('Error:', e.message)) || new Object();
+                    if (confirmAction.confirmed !== true) {
+                        return;
+                    }
+                    var recordId = P365I_CRM.Common.Helpers.cleanID(primaryControl.data.entity.getId());
+                    var record = {};
+                    record.statuscode = P365I_CRM.Common.Enums.Incident.IncidentStatus.InProgress;
+                    record.statecode = P365I_CRM.Common.Enums.Incident.IncidentState.Active;
+                    Xrm.WebApi.updateRecord("p365i_incident", recordId, record).then(function success(result) {
+                        primaryControl.data.refresh(false);
+                    }, function (error) {
+                        console.log(error.message);
+                    });
+                }
+                catch (error) {
+                    console.log(`Reactivate error`, error);
+                    P365I_CRM.Common.Helpers.displayErrorMessage(error);
+                }
+            }
+            Incident.ReactivateIncident = ReactivateIncident;
+        })(Incident = Ribbon.Incident || (Ribbon.Incident = {}));
         let Prospect;
         (function (Prospect) {
             async function Qualify(primaryControl, customPageName) {
